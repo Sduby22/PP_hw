@@ -1,0 +1,10 @@
+# working dir of scripts and main interpreter.
+pwd: .
+
+# path of user database, will be injected into scripts.
+user-db: ./data/random-users.py
+
+# scripts dirs
+scripts: 
+  dirs: 
+    - ./scripts/
