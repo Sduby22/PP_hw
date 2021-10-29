@@ -1,5 +1,6 @@
 step Main
-	name = callpy "GetName.py" $_number
+	callpy "GetName.py" $_number
+	name = $_ret
 	speak "你好" + $name + ", 请问有什么可以帮您？"
 	wait 10
 	switch $_keyword
@@ -13,7 +14,8 @@ step Main
 endstep
 
 step Balance
-	balance := callpy "GetBalance.py" $_number
+	callpy "GetBalance.py" $_number
+	balance = $_ret
 	speak "您的当前可用余额为：" + $balance + "元"
 endstep
 
