@@ -1,0 +1,6 @@
+gen-random-users:
+  stage: build
+  script:
+    - cd data
+    - sqlite3 random_users.db < DDL.sql
+    - python3 GenRandomUsers.py
