@@ -1,0 +1,14 @@
+# working dir of scripts and main interpreter.
+pwd: .
+
+# runtime config
+config:
+  # wait forever instead of wait a fixed time.
+  wait-forever: true
+  # kill runpy script after timeout (ms)
+  timeout: 3000
+
+# scripts dirs
+scripts: 
+  dirs: 
+    - ./scripts/

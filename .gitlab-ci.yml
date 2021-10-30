@@ -1,7 +1,14 @@
-gen-random-users:
+before_script:
+  - pip3 install -r requirements.txt
+
+gen_random_users:
   stage: build
   script:
-    - pip3 install -r requirements.txt
     - cd data
     - sqlite3 random_users.db < DDL.sql
     - python3 GenRandomUsers.py
+
+tests:
+  stage: test
+  script:
+    - python3 tests.py

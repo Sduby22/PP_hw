@@ -1,0 +1,15 @@
+# working dir of scripts and main interpreter.
+pwd: .
+
+# runtime config
+config:
+  # path of user database, will be injected into scripts.
+  user-db: ./data/random-users.py
+  # wait forever instead of wait a fixed time.
+  wait-forever: true
+  # kill runpy script after timeout (ms)
+  timeout: 3000
+
+# scripts dirs
+scripts: 
+  dirs: ./scripts/
