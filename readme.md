@@ -45,5 +45,5 @@ term		: VAR | STR
 
 va_args		: '' | term | term ' ' va_args
 
-binary_operator : '==' | '<' | '>' | '<=' | '>='
+binary_operator : '==' | '<' | '>' | '<=' | '>=' | '!='
 ```
