@@ -1,6 +1,7 @@
 import unittest
 import yaml
 from src.ConfigLoader import ConfigLoader
+from src.ply.Lexer import Lexer, KEYWORD
 from schema import SchemaError
 
 class ConfigLoaderTest(unittest.TestCase):
@@ -19,6 +20,45 @@ class ConfigLoaderTest(unittest.TestCase):
         with open(path, 'r' ,encoding='utf8') as f:
             self.assertEqual(conf.getConfig(), yaml.load(f, yaml.CLoader), 'Config Loaded Incorrectly.')
 
+class LexerTest(unittest.TestCase):
+    def get_token(self, str):
+        lexer = Lexer()
+        lexer.setConfig(True)
+        lexer.load_str(str)
+        return lexer.token()
+
+    def test_lexer_string1(self):
+        str = r'"asdsad\"dasds"'
+        token = self.get_token(str)
+        self.assertEqual(str, token.value)
+
+
+    def test_lexer_string2(self):
+        str = r"'asdsad\'\'\'dasds'"
+        token = self.get_token(str)
+        self.assertEqual(str, token.value)
+
+    def test_lexer_string3(self):
+        str = r"'asd'dsad'"
+        token = self.get_token(str)
+        self.assertNotEqual(str, token.value)
+
+    def test_lexer_string4(self):
+        str = "'asd\ndsad'"
+        self.assertRaises(RuntimeError, self.get_token, str)
+
+    def test_lexer_keyword(self):
+        for key in KEYWORD:
+            t = self.get_token(key)
+            self.assertEqual(key, t.value)
+
+    def test_lexer_file(self):
+        lexer = Lexer()
+        lexer.setConfig(True)
+        lexer.load('tests/Example.job')
+        t = lexer.token()
+        while t:
+            t = lexer.token()
 
 if __name__ == "__main__":
     unittest.main()
