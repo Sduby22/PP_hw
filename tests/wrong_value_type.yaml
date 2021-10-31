@@ -2,14 +2,18 @@
 pwd: .
 
 # runtime config
-config:
+runtime:
   # path of user database, will be injected into scripts.
   user-db: ./data/random-users.py
-  # wait forever instead of wait a fixed time.
+  # 'wait n' waits forever instead of wait a fixed time.
   wait-forever: true
   # kill runpy script after timeout (ms)
   timeout: 3000
 
-# scripts dirs
+job:
+  path: ./config.yaml
+  halt-onerror: false
+
+# python scripts dirs
 scripts: 
-  dirs: ./scripts/
+  dirs: ./scripts/ # should be lists

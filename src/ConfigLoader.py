@@ -21,10 +21,14 @@ class ConfigLoader:
     def _validate(self, config):
         schema = Schema({
             Optional('pwd', default='.'): str,
-            'config': {
+            'runtime': {
                 'user-db': str,
                 'wait-forever': bool,
                 'timeout': int,
+            },
+            'job': {
+                'path': str,
+                'halt-onerror': bool,
             },
             'scripts': {
                 'dirs': [str]
