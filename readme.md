@@ -24,8 +24,6 @@ oneline		: VAR '=' terms
 		| 'beep'
 		| 'wait' term
 		| 'call' STEPNAME va_args
-		| switch
-		| if
 		| 'hangup'
 
 multiline	: if
