@@ -42,6 +42,7 @@ KEYWORD = (
 
 tokens = (
         'KEYWORD',
+        'NEWLINE',
         'VAR',
         'STEP',
         'STRING',
@@ -56,9 +57,10 @@ def t_OPERATOR(t):
     r'\+|(=|>|<|!)?=|>|<'
     return t
 
-def t_newline(t):
+def t_NEWLINE(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
+    return t
 
 
 def t_KEYWORD(t):
