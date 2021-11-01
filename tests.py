@@ -18,7 +18,10 @@ class ConfigLoaderTest(unittest.TestCase):
         path = 'tests/good_value.yaml'
         conf.load(path)
         with open(path, 'r' ,encoding='utf8') as f:
-            self.assertEqual(conf.getConfig(), yaml.load(f, yaml.CLoader), 'Config Loaded Incorrectly.')
+            right = yaml.load(f, yaml.CLoader)
+        right.update({'pwd': '.'})
+        self.assertEqual(conf.getConfig(), right, 'Config Loaded Incorrectly.')
+        self.assertEqual(conf.getConfig().get('pwd'), '.', 'Failed to extract default value.')
 
 class LexerTest(unittest.TestCase):
     def get_token(self, str):
