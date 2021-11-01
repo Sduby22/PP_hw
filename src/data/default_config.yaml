@@ -1,5 +1,5 @@
 # working dir of scripts and main interpreter.
-#pwd: .
+pwd: .
 
 # runtime config
 runtime:
