@@ -7,14 +7,17 @@ runtime:
   user-db: ./data/random-users.py
   # 'wait n' waits forever instead of wait a fixed time.
   wait-forever: true
-  # kill runpy script after timeout (ms)
-  timeout: 3000
 
 job:
-  path: ./config.yaml
+  path: ./Example.job
+  # halts program on job scripts syntax errors.
   halt-onerror: false
 
 # python scripts dirs
 scripts: 
+  # kill runpy script after timeout (ms)
+  timeout: 3000
+  # halts robot on runpy errors or timeouts.
+  halt-onerror: false
   dirs: 
     - ./scripts/

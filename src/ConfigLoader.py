@@ -31,13 +31,14 @@ class ConfigLoader:
             'runtime': {
                 'user-db': str,
                 'wait-forever': bool,
-                'timeout': int,
             },
             'job': {
                 'path': str,
                 'halt-onerror': bool,
             },
             'scripts': {
+                'halt-onerror': bool,
+                'timeout': int,
                 'dirs': [str]
             }
         })
