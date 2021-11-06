@@ -39,13 +39,15 @@ class RunPy:
             spec.loader.exec_module(foo)
 
     def register(self, name):
+        print(name)
         def wrapper1(func):
             if name in self._nameFuncMap:
                 logger.warning(f'[RunPy] Reregistering Script {name}, the old will be overwritten.')
             self._nameFuncMap[name] = func
             logger.info(f'[RunPy] Registered Script {name}')
             def wrapper2():
-                func()
+                ret = func()
+                return ret
             return wrapper2
         return wrapper1
 
