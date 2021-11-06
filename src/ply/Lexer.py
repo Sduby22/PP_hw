@@ -19,7 +19,7 @@ class Lexer:
         with open(path, 'r', encoding='utf8') as f:
             self._f = f.read()
         if not self._f:
-            logger.error(f'[Lexer] Failed to load file {path}')
+            logger.error(f'Failed to load file {path}')
             return
         self._lexer.input(self._f)
         self._lexer.lineno = 1
@@ -84,7 +84,7 @@ def t_STRING(t):
     return t
 
 def t_error(t):
-    msg = f'[Lexer] line {t.lexer.lineno}: Unexpected symbol {t.value}'
+    msg = f'line {t.lexer.lineno}: Unexpected symbol {t.value}'
     if halt_on_error:
         raise RuntimeError(msg)
     logger.error(msg) 
