@@ -3,8 +3,8 @@ from logging import getLogger
 logger = getLogger('Runtime')
 
 class Runtime:
-    def __init__(self,config_loader):
-        self.configLoader = config_loader
+    def __init__(self,configLoader):
+        self._configLoader = configLoader
         logger.info("[Runtime] Initializing runtime")
         logger.debug(f"[Runtime] config is {self.getConfig()}")
         pass
@@ -14,4 +14,5 @@ class Runtime:
         pass    
 
     def getConfig(self):
-        return self.configLoader.getRuntimeConfig()
+        return self._configLoader.getRuntimeConfig()
+
