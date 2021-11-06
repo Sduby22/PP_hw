@@ -30,7 +30,6 @@ class ConfigLoader:
             Optional('pwd', default='.'): str,
             'runtime': {
                 'user-db': str,
-                'wait-forever': bool,
             },
             'job': {
                 'path': str,

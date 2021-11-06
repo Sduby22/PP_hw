@@ -3,9 +3,7 @@ pwd: .
 
 # runtime config
 config:
-  # wait forever instead of wait a fixed time.
-  wait-forever: true
-
+  user-db: '.'
 # scripts dirs
 scripts: 
   dirs: 
