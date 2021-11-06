@@ -2,17 +2,13 @@ from ply.lex import lex
 from logging import getLogger
 
 logger = getLogger('Interpreter')
-halt_on_error = False
 
 class Lexer:
-    def __init__(self):
+    def __init__(self, configLoader):
         global lexer
+        lexer._configLoader = configLoader
         self._lexer = lexer
         self._f = None
-
-    def setConfig(self, halt_onerror=False):
-        global halt_on_error
-        halt_on_error = halt_onerror
 
     def load(self, path):
         self._f = None
@@ -85,7 +81,7 @@ def t_STRING(t):
 
 def t_error(t):
     msg = f'line {t.lexer.lineno}: Unexpected symbol {t.value}'
-    if halt_on_error:
+    if lexer._configLoader.getJobConfig().get('halt-onerror'):
         raise RuntimeError(msg)
     logger.error(msg) 
     t.lexer.skip(1)

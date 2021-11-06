@@ -4,4 +4,3 @@ from src.RunPy import runpy
 def foo():
     print('foo')
 
-print(1)

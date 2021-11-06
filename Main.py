@@ -1,5 +1,5 @@
-from src.ConfigLoader import *
-from src.RunPy import * 
+from src.Runtime import *
+import logging
 
 logging.basicConfig(
         level=logging.DEBUG,
@@ -7,8 +7,4 @@ logging.basicConfig(
         )
 
 if __name__ == '__main__':
-    a = ConfigLoader()
-    a.load('./config.yaml')
-    runpy = getInstance()
-    runpy.init(a)
-
+    runtime = Runtime(config = './config.yaml')

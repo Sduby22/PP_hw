@@ -1,11 +1,10 @@
 from ply.yacc import yacc
-from .Lexer import tokens
+from src.ply.Lexer import tokens
 
 class Parser:
-    def __init__(self):
+    def __init__(self, configLoader):
         global yac
         self._yacc = yac
-
-def 
+        yac._configLoader = configLoader
 
 yac = yacc()

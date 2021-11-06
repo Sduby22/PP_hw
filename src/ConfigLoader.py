@@ -38,7 +38,6 @@ class ConfigLoader:
             },
             'scripts': {
                 'halt-onerror': bool,
-                'timeout': int,
                 'dirs': [str]
             }
         })
