@@ -15,8 +15,6 @@ job:
 
 # python scripts dirs
 scripts: 
-  # kill runpy script after timeout (ms)
-  timeout: 3000
   # halts robot on runpy errors or timeouts.
   halt-onerror: false
   dirs: 
