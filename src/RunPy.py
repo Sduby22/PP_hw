@@ -32,14 +32,12 @@ class RunPy:
         dirs = self.getConfig().get('dirs')
         for dir in dirs:
             self._getFiles(dir)
-        print(self._fileList)
         for file in self._fileList:
             spec = importlib.util.spec_from_file_location("script", file)
             foo = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(foo)
 
     def register(self, name):
-        print(name)
         def wrapper1(func):
             if name in self._nameFuncMap:
                 logger.warning(f'Reregistering Script {name}, the old will be overwritten.')
@@ -59,12 +57,12 @@ class RunPy:
             raise RuntimeError(f'Invalid Script Name {funcName}')
         argspec = inspect.getargspec(func)
         maxArgs = len(argspec.args)
-        minArgs = len(argspec.args) - len(argspec.defaults)
+        minArgs = len(argspec.args) - len(argspec.defaults) if argspec.defaults else 0
         if len(args) < minArgs:
-            logger.fatal(f'Not Enough Aruguments to Call {funcName}, expected minimum of {minArgs}, got{len(args)}')
+            logger.error(f'Not Enough Aruguments to Call {funcName}, expected minimum of {minArgs}, got{len(args)}')
             raise RuntimeError(f'Not Enough Aruguments to Call {funcName}, expected minimum of {minArgs}, got{len(args)}')
         elif len(args) > maxArgs:
-            logger.fatal(f'Too many Aruguments to Call {funcName}, expected maximum of {maxArgs}, got{len(args)}')
+            logger.error(f'Too many Aruguments to Call {funcName}, expected maximum of {maxArgs}, got{len(args)}')
             raise RuntimeError(f'Too many Aruguments to Call {funcName}, expected maximum of {maxArgs}, got{len(args)}')
         return func(*args)
 
