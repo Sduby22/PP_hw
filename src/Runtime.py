@@ -10,7 +10,7 @@ class Runtime:
         pass
 
     def start(self, number):
-        logger.info(f'[Runtime] Incoming call {number}')
+        logger.info(f'Incoming call {number}')
         pass    
 
     def getConfig(self):

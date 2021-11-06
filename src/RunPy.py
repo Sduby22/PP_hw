@@ -41,29 +41,29 @@ class RunPy:
     def register(self, name):
         def wrapper1(func):
             if name in self._nameFuncMap:
-                logger.warning(f'[RunPy] Reregistering Script {name}, the old will be overwritten.')
+                logger.warning(f'Reregistering Script {name}, the old will be overwritten.')
             self._nameFuncMap[name] = func
-            logger.info(f'[RunPy] Registered Script {name}')
+            logger.info(f'Registered Script {name}')
             def wrapper2():
                 func()
             return wrapper2
         return wrapper1
 
     def callFunc(self, funcName, *args):
-        logger.info(f'[RunPy] Calling Python Script {funcName}')
+        logger.info(f'Calling Python Script {funcName}')
         func = self._nameFuncMap.get(funcName, None)
         if not func:
-            logger.fatal(f'[RunPy] Invalid Script Name {funcName}')
+            logger.fatal(f'Invalid Script Name {funcName}')
             raise RuntimeError(f'Invalid Script Name {funcName}')
         argspec = inspect.getargspec(func)
         maxArgs = len(argspec.args)
         minArgs = len(argspec.args) - len(argspec.defaults)
         if len(args) < minArgs:
-            logger.fatal(f'[RunPy] Not Enough Aruguments to Call {funcName}, expected minimum of {minArgs}, got{len(args)}')
-            raise RuntimeError(f'[RunPy] Not Enough Aruguments to Call {funcName}, expected minimum of {minArgs}, got{len(args)}')
+            logger.fatal(f'Not Enough Aruguments to Call {funcName}, expected minimum of {minArgs}, got{len(args)}')
+            raise RuntimeError(f'Not Enough Aruguments to Call {funcName}, expected minimum of {minArgs}, got{len(args)}')
         elif len(args) > maxArgs:
-            logger.fatal(f'[RunPy] Too many Aruguments to Call {funcName}, expected maximum of {maxArgs}, got{len(args)}')
-            raise RuntimeError(f'[RunPy] Too many Aruguments to Call {funcName}, expected maximum of {maxArgs}, got{len(args)}')
+            logger.fatal(f'Too many Aruguments to Call {funcName}, expected maximum of {maxArgs}, got{len(args)}')
+            raise RuntimeError(f'Too many Aruguments to Call {funcName}, expected maximum of {maxArgs}, got{len(args)}')
         return func(*args)
 
 runpy = RunPy()
