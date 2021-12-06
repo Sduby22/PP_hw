@@ -18,19 +18,22 @@ class Runtime:
                 '_number': '',
                 '_input': '',
                 '_ret': '',
-                }
+            }
         pass
 
     def handleCall(self, number):
         logger.info(f'Incoming call {number}')
         self._variables['number'] = number
-        pass    
 
-    def _speak(self, str):
+    def speak(self, str):
         print(f'<<< {str}')
 
-    def _wait(self, time):
+    def wait(self, time):
         print(f'Waiting {time} milliseconds for user input...')
+        input('>>> ')
 
     def getConfig(self):
         return self._configLoader.getRuntimeConfig()
+
+    def hangup(self):
+        pass	

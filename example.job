@@ -35,10 +35,7 @@ endstep
 step Topup
 	speak "请告诉我您想充值的金额"
 	wait 10
-	if $_input_number <= 0
-		call Bye "抱歉，充值金额不合法，再见！"
-	endif
-	
+
 	speak "您想充值" + $_input_number + "元，是吗？"
 	wait 10
 	switch $_input_keyword

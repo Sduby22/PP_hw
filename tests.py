@@ -25,8 +25,9 @@ class ConfigLoaderTest(unittest.TestCase):
 
 class LexerTest(unittest.TestCase):
     def get_token(self, str):
-        lexer = Lexer()
-        lexer.setConfig(True)
+        conf = ConfigLoader()
+        conf.load('tests/good_value.yaml')
+        lexer = Lexer(conf)
         lexer.load_str(str)
         return lexer.token()
 
@@ -56,8 +57,9 @@ class LexerTest(unittest.TestCase):
             self.assertEqual(key, t.value)
 
     def test_lexer_file(self):
-        lexer = Lexer()
-        lexer.setConfig(True)
+        conf = ConfigLoader()
+        conf.load('tests/good_value.yaml')
+        lexer = Lexer(conf)
         lexer.load('tests/Example.job')
         t = lexer.token()
         while t:

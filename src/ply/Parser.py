@@ -5,6 +5,6 @@ class Parser:
     def __init__(self, configLoader):
         global yac
         self._yacc = yac
-        yac._configLoader = configLoader
+        self._configLoader = configLoader
 
 yac = yacc()

@@ -9,7 +9,7 @@ runtime:
 job:
   path: ./Example.job
   # halts program on job scripts syntax errors.
-  halt-onerror: false
+  halt-onerror: true
 
 # python scripts dirs
 scripts: 
