@@ -1,7 +1,7 @@
 import unittest
 import yaml
 from src.ConfigLoader import ConfigLoader
-from src.ply.Lexer import Lexer, KEYWORD
+from src.ply.Lexer import Lexer
 from schema import SchemaError
 
 class ConfigLoaderTest(unittest.TestCase):
@@ -52,7 +52,7 @@ class LexerTest(unittest.TestCase):
         self.assertRaises(RuntimeError, self.get_token, str)
 
     def test_lexer_keyword(self):
-        for key in KEYWORD:
+        for key in Lexer.KEYWORD:
             t = self.get_token(key)
             self.assertEqual(key, t.value)
 

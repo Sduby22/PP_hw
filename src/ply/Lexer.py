@@ -4,11 +4,69 @@ from logging import getLogger
 logger = getLogger('Interpreter')
 
 class Lexer:
+    KEYWORD = (
+            'switch', 'case', 'default',
+            'step', 'endstep', 'call', 'callpy', 
+            'wait', 'beep', 'speak', 'hangup'
+            )
+
+    tokens = (
+            'KEYWORD',
+            'NEWLINE',
+            'VAR',
+            'STEP',
+            'STRING',
+            'OPERATOR',
+            'NUMBER',
+            )
+
+    t_ignore_COMMENT = r'\#.*'
+    t_ignore = ' \t'
+
     def __init__(self, configLoader):
-        global lexer
-        lexer._configLoader = configLoader
-        self._lexer = lexer
+        self._lexer = lex(module=self)
         self._f = None
+        self._configLoader = configLoader
+
+    def t_OPERATOR(self, t):
+        r'\+|(=|>|<|!)?=|>|<'
+        return t
+
+    def t_NEWLINE(self, t):
+        r'\n+'
+        t.lexer.lineno += len(t.value)
+        return t
+
+
+    def t_KEYWORD(self, t):
+        r'[a-zA-Z_][a-zA-Z_0-9]*'
+        if t.value not in self.KEYWORD:
+            t.type = 'STEP'
+        return t
+
+    def t_VAR(self, t):
+        r'\$[a-zA-Z_0-9]*'
+        t.value = t.value[1:]
+        return t
+
+    def t_NUMBER(self, t):
+        r'\d+'
+        t.value = int(t.value)
+        return t
+
+    def t_STRING(self, t):
+        r'''("((\\\")|[^\n\"])*")|('((\\\')|[^\n\'])*')'''
+        return t
+
+    def t_error(self, t):
+        msg = f'line {t.lexer.lineno}: Unexpected symbol {t.value}'
+        if self._configLoader.getJobConfig().get('halt-onerror'):
+            raise RuntimeError(msg)
+        logger.error(msg) 
+        t.lexer.skip(1)
+
+    def getLexer(self):
+        return self._lexer
 
     def load(self, path):
         self._f = None
@@ -30,60 +88,4 @@ class Lexer:
             raise RuntimeError('reading token before load.')
         return self._lexer.token()
 
-KEYWORD = (
-        'if', 'endif', 'else', 'endif', 'switch', 'case', 'default',
-        'step', 'endstep', 'call', 'callpy', 
-        'wait', 'beep', 'speak', 'hangup'
-        )
 
-tokens = (
-        'KEYWORD',
-        'NEWLINE',
-        'VAR',
-        'STEP',
-        'STRING',
-        'OPERATOR',
-        'NUMBER',
-        )
-
-t_ignore_COMMENT = r'\#.*'
-t_ignore = ' \t'
-
-def t_OPERATOR(t):
-    r'\+|(=|>|<|!)?=|>|<'
-    return t
-
-def t_NEWLINE(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-    return t
-
-
-def t_KEYWORD(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    if t.value not in KEYWORD:
-        t.type = 'STEP'
-    return t
-
-def t_VAR(t):
-    r'\$[a-zA-Z_0-9]*'
-    t.value = t.value[1:]
-    return t
-
-def t_NUMBER(t):
-    r'\d+'
-    t.value = int(t.value)
-    return t
-
-def t_STRING(t):
-    r'''("((\\\")|[^\n\"])*")|('((\\\')|[^\n\'])*')'''
-    return t
-
-def t_error(t):
-    msg = f'line {t.lexer.lineno}: Unexpected symbol {t.value}'
-    if lexer._configLoader.getJobConfig().get('halt-onerror'):
-        raise RuntimeError(msg)
-    logger.error(msg) 
-    t.lexer.skip(1)
-
-lexer = lex()

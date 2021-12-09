@@ -22,7 +22,7 @@ class ConfigLoader:
         if self._validate(config):
             self._config = config
         else:
-            self._config = None
+            self._config = {}
         self._updateDefault()
 
     def _validate(self, config):
