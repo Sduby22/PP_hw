@@ -1,5 +1,5 @@
-from src.ply.Lexer import Lexer
-from src.ply.Parser import Parser
+from .ply import Lexer
+from .ply import Parser
 from logging import getLogger
 
 logger = getLogger('Interpreter')

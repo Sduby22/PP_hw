@@ -1,10 +1,5 @@
 class ASTNode:
-    def __init__(self, type, *args):
+    def __init__(self, type, *childs):
         self.type = type
-        self.l = [type] + list(args)
-
-class AST:
-    def __init__(self):
-        self.root = ASTNode("pseudo")
-        self.step = []
+        self.childs = childs
 

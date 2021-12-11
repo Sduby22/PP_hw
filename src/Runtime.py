@@ -1,6 +1,6 @@
 from logging import getLogger
-from src.RunPy import getInstance
-from src.ConfigLoader import *
+from .RunPy import getInstance
+from . import ConfigLoader
 
 logger = getLogger('Runtime')
 

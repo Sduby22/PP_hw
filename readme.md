@@ -10,13 +10,13 @@
 job		: stepblock
 		| stepblock job
 
-stepblock	: 'step' STEPNAME expressions 'endstep'
+stepdecl	: 'step' STEPNAME expressions 'endstep'
 
 expressions	: expression
 			| expression expressions
 
 expression	: oneline
-			| multiline
+			| switch
 
 oneline		: VAR '=' terms
 			| 'speak' terms

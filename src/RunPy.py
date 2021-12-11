@@ -1,4 +1,4 @@
-from src.ConfigLoader import *
+from . import ConfigLoader
 import os
 import importlib.util
 import inspect
