@@ -1,7 +1,7 @@
 import unittest
 import yaml
-from src.ConfigLoader import ConfigLoader
-from src.ply.Lexer import Lexer
+from src import ConfigLoader
+from src.ply import Lexer, Parser
 from schema import SchemaError
 
 class ConfigLoaderTest(unittest.TestCase):
@@ -52,7 +52,7 @@ class LexerTest(unittest.TestCase):
         self.assertRaises(RuntimeError, self.get_token, str)
 
     def test_lexer_keyword(self):
-        for key in Lexer.KEYWORD:
+        for key in Lexer.reserved.keys():
             t = self.get_token(key)
             self.assertEqual(key, t.value)
 
@@ -64,6 +64,17 @@ class LexerTest(unittest.TestCase):
         t = lexer.token()
         while t:
             t = lexer.token()
+
+class ParserTest(unittest.TestCase):
+    def test_parse_job(self):
+        conf = ConfigLoader()
+        conf.load('./config.yaml')
+        lexer = Lexer(conf)
+        lexer.load('./example.job')
+        parser = Parser(conf, lexer)
+        with open('./example.job', 'r') as f:
+            p = parser.parseStr(f.read())
+            p.print()
 
 if __name__ == "__main__":
     unittest.main()

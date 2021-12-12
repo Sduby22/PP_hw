@@ -12,7 +12,7 @@ job		: stepblock
 
 stepdecl	: 'step' STEPNAME expressions 'endstep'
 
-expressions	: expression
+expressions	: empty
 			| expression expressions
 
 expression	: oneline
@@ -22,7 +22,7 @@ oneline		: VAR '=' terms
 			| 'speak' terms
 			| 'callpy' PYFILE va_args
 			| 'beep'
-			| 'wait' term
+			| 'wait' terms
 			| 'call' STEPNAME va_args
 			| 'hangup'
 
@@ -31,14 +31,14 @@ switch		: 'switch' VAR switch_body 'endswitch'
 switch_body	: cases 
 			| cases default
 
-cases		: case 
+cases		: empty 
 			| case cases
 
-case		: 'case' term oneline
+case		: 'case' terms oneline
 default		: 'default' oneline
 
 terms		: term | term '+' terms
 term		: VAR | STR
 
-va_args		: '' | term | term ' ' va_args
+va_args		: empty | term ' ' va_args
 ```

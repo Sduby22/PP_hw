@@ -1,8 +1,8 @@
 step Main
-	callpy "GetName.py" $_number
+	callpy GetName $_number
 	$name = $_ret
 	speak "你好" + $name + ", 请问有什么可以帮您？"
-	wait 10
+	wait '10'
 	switch $_keyword
 		case "话费" call Balance
 		case "投诉" call Complaint
@@ -14,7 +14,7 @@ step Main
 endstep
 
 step Balance
-	callpy "GetBalance.py" $_number
+	callpy GetBalance $_number
 	$balance = $_ret
 	speak "您的当前可用余额为：" + $balance + "元"
 endstep
@@ -23,21 +23,21 @@ step Complaint
 	speak "您好，请在滴声后留下您的宝贵建议"
 	beep
 	wait
-	callpy "UploadComplaint.py" $_input
+	callpy UploadComplaint $_input
 endstep
 
 step Service
 	speak "您好，正在为您转接人工客服，请耐心等待。"
-	wait 3
+	wait '3'
 	call Bye "抱歉，目前没有空闲的人工客服，再见！"
 endstep
 
 step Topup
 	speak "请告诉我您想充值的金额"
-	wait 10
+	wait '10'
 	
 	speak "您想充值" + $_input_number + "元，是吗？"
-	wait 10
+	wait '10'
 	switch $_input_keyword
 		case "是" speak "谢谢您的支持，充值成功。"
 		case "否" speak "充值已取消"
