@@ -78,6 +78,7 @@ class Lexer:
 
     def t_STR(self, t):
         r'''("((\\\")|[^\n\"])*")|('((\\\')|[^\n\'])*')'''
+        t.value = t.value[1:-1]
         return t
 
     def t_error(self, t):

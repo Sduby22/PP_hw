@@ -100,7 +100,7 @@ class Parser:
         '''
         default : DEFAULT oneline NEWLINE
         '''
-        p[0] = [ASTNode(('default'), p[2])]
+        p[0] = [ASTNode(('default',), p[2])]
 
     def p_case(self, p):
         '''
@@ -114,7 +114,7 @@ class Parser:
               | term '+' terms
         '''
         if len(p) == 2:
-            p[0] = ASTNode(('terms'), p[1])
+            p[0] = ASTNode(('terms',), p[1])
         else:
             p[0] = p[3]
             p[0].childs = [p[1]] + p[0].childs
@@ -140,7 +140,7 @@ class Parser:
             p[0] = p[2]
             p[0].childs = [p[1]] + p[0].childs
         else:
-            p[0] = ASTNode(('va_args'))
+            p[0] = ASTNode(('va_args',))
 
     def p_empty(self, _):
         '''

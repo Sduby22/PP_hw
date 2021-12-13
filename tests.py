@@ -34,18 +34,18 @@ class LexerTest(unittest.TestCase):
     def test_lexer_string1(self):
         str = r'"asdsad\"dasds"'
         token = self.get_token(str)
-        self.assertEqual(str, token.value)
+        self.assertEqual(str, f'"{ token.value }"')
 
 
     def test_lexer_string2(self):
         str = r"'asdsad\'\'\'dasds'"
         token = self.get_token(str)
-        self.assertEqual(str, token.value)
+        self.assertEqual(str, f"'{ token.value }'")
 
     def test_lexer_string3(self):
-        str = r"'asd'dsad'"
+        str = r"'asddsad'"
         token = self.get_token(str)
-        self.assertNotEqual(str, token.value)
+        self.assertEqual(str, f"'{ token.value }'")
 
     def test_lexer_string4(self):
         str = "'asd\ndsad'"

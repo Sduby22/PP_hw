@@ -1,4 +1,4 @@
-from src.Runtime import *
+from src import *
 import logging
 
 logging.basicConfig(
@@ -7,4 +7,8 @@ logging.basicConfig(
         )
 
 if __name__ == '__main__':
-    runtime = Runtime(config = './config.yaml')
+    conf = ConfigLoader('./config.yaml')
+    runtime = Runtime('1841232132', conf)
+    interpreter = Interpreter(conf)
+    interpreter.setRuntime(runtime)
+    interpreter.run()

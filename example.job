@@ -3,7 +3,7 @@ step Main
 	$name = $_ret
 	speak "你好" + $name + ", 请问有什么可以帮您？"
 	wait '10'
-	switch $_keyword
+	switch $_input_keyword
 		case "话费" call Balance
 		case "投诉" call Complaint
 		case "客服" call Service
