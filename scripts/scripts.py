@@ -5,7 +5,6 @@ runpy = RunPy.getInstance()
 
 @runpy.register('GetName')
 def getname(number):
-    print(number)
     conn = sqlite3.connect('data/random_users.db')
     cur = conn.cursor()
     cur = cur.execute('select name from users where number = (?)', (number,))
