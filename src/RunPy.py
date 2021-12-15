@@ -12,10 +12,14 @@ def getInstance():
 
 class RunPy:
     def __init__(self):
-        self._configLoader: ConfigLoader
+        self._configLoader = None
         self._fileList = []
         self._nameFuncMap = {}
         pass
+
+    @classmethod
+    def getInstance(cls):
+        return runpy
 
     def getConfig(self):
         return self._configLoader.getScriptsConfig()
@@ -28,6 +32,8 @@ class RunPy:
                 self._fileList.append(os.path.join(dirpath, name))
 
     def init(self, configLoader):
+        if self._configLoader:
+            return 
         self._configLoader = configLoader
         dirs = self.getConfig().get('dirs')
         for dir in dirs:

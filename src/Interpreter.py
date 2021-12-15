@@ -8,13 +8,14 @@ from src import RunPy
 from logging import getLogger
 
 logger = getLogger('Interpreter')
-
+runpy = RunPy.getInstance()
 
 class Interpreter:
     def __init__(self, configLoader: ConfigLoader):
         self._lexer = Lexer(configLoader)
         self._parser = Parser(configLoader, self._lexer)
         self._config = configLoader
+        runpy.init(self._config)
         self.job = ''
         self.ast = None
         self.steps = {}
@@ -36,8 +37,10 @@ class Interpreter:
         for stepdecl in self.ast.childs:
             self.steps[stepdecl.type[1]] = stepdecl
 
-    def setRuntime(self, runtime: Runtime):
+    def accept(self, runtime: Runtime):
+        self._stop = False
         self.runtime = runtime
+        self.run()
 
     def run(self):
         if not self.runtime or not self.ast:
@@ -75,7 +78,7 @@ class Interpreter:
             case 'speak':
                 self.runtime.speak(self._eval(expr.childs[0]))
             case 'callpy':
-                self.runtime.callpy(expr.childs[0].type[1], *self._eval(expr.childs[1]))
+                self._callpy(expr.childs[0].type[1], *self._eval(expr.childs[1]))
             case 'beep':
                 self.runtime.beep()
             case 'wait':
@@ -85,6 +88,10 @@ class Interpreter:
                 self.runtime.hangup()
             case 'switch':
                 self._exec_switch(expr)
+
+    def _callpy(self, funcName, *args):
+        ret = runpy.callFunc(funcName, *args)
+        self.runtime.assign('_ret', ret)
 
     def _exec_switch(self, expr: ASTNode):
         condition = self.runtime.getvar(expr.type[2])

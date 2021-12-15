@@ -1,6 +1,8 @@
 from logging import getLogger
+import asyncio
+import aioconsole
+import re
 
-from .RunPy import getInstance
 from . import ConfigLoader
 
 logger = getLogger('Runtime')
@@ -20,8 +22,6 @@ class Runtime:
     def __init__(self, number, config: ConfigLoader):
         logger.info("Initializing runtime")
         self._conf = config
-        self._runpy = getInstance()
-        self._runpy.init(self._conf)
         self._variables = {
             '_input': '',
             '_input_keyword': '',
@@ -37,21 +37,27 @@ class Runtime:
         print(f'>>> {str}')
 
     def wait(self, timeStr):
-        print(f'Waiting {timeStr} milliseconds for user input...')
+        # async def ainput():
+        #     str = ''
+        #     try:
+        #         str = await asyncio.wait_for(aioconsole.ainput("<<<"), int(timeStr))
+        #     except asyncio.TimeoutError as e:
+        #         str = ''
+        #     self.assign('_input', str)
+        #     self._extractKeywords(str)
+        #     self._extractNumbers(str)
+        # asyncio.run(ainput())
+        self.speak(f'Waiting user input for {timeStr} seconds')
         str = input('<<< ')
-        self._variables['_input'] = str
+        self.assign('_input', str)
         self._extractKeywords(str)
+        self._extractNumbers(str)
 
     def hangup(self):
         logger.info(f"user {self._variables.get('_number')} hung up")
-        print('beep')
 
     def assign(self, var, val):
-        self._variables[var] = val
-        pass
-
-    def callpy(self, name, *args):
-        print('callpy', name, args)
+        self._variables[var] = str(val)
         pass
 
     def beep(self):
@@ -63,12 +69,13 @@ class Runtime:
             self._variables[varname] = ''
         return self._variables[varname]
 
-    def setarg(self, *args):
-        for i in range(len(args)):
-            self._variables[str(i)] = args[i]
-
     def _extractKeywords(self, str):
         for key in self.KEYWORDS:
             if key in str:
                 self._variables['_input_keyword'] = key
                 break
+
+    def _extractNumbers(self, str):
+        match = re.findall(r'\d+', str)
+        if match:
+            self.assign('_input_number', match[0])

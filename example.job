@@ -2,7 +2,7 @@ step Main
 	callpy GetName $_number
 	$name = $_ret
 	speak "你好" + $name + ", 请问有什么可以帮您？"
-	wait '10'
+	wait '1'
 	switch $_input_keyword
 		case "话费" call Balance
 		case "投诉" call Complaint
