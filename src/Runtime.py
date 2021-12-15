@@ -9,15 +9,15 @@ logger = getLogger('Runtime')
 class Runtime:
 
     KEYWORDS = [
-            '是',
-            '否',
-            '话费',
-            '投诉',
-            '客服',
-            '充值',
-            ]
-    
-    def __init__(self, number, config:ConfigLoader):
+        '是',
+        '否',
+        '话费',
+        '投诉',
+        '客服',
+        '充值',
+    ]
+
+    def __init__(self, number, config: ConfigLoader):
         logger.info("Initializing runtime")
         self._conf = config
         self._runpy = getInstance()
@@ -45,10 +45,9 @@ class Runtime:
     def hangup(self):
         logger.info(f"user {self._variables.get('_number')} hung up")
         print('beep')
-        pass
 
     def assign(self, var, val):
-        print('assign', var, val)
+        self._variables[var] = val
         pass
 
     def callpy(self, name, *args):
@@ -72,3 +71,4 @@ class Runtime:
         for key in self.KEYWORDS:
             if key in str:
                 self._variables['_input_keyword'] = key
+                break

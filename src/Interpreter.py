@@ -1,9 +1,10 @@
 from functools import reduce
-from src.ConfigLoader import ConfigLoader
-from src.Runtime import Runtime
+from src import ConfigLoader
+from src import Runtime
 from src.ply.AST import ASTNode
 from .ply import Lexer
 from .ply import Parser
+from src import RunPy
 from logging import getLogger
 
 logger = getLogger('Interpreter')
@@ -17,6 +18,7 @@ class Interpreter:
         self.job = ''
         self.ast = None
         self.steps = {}
+        self._stop = False
 
         self._load_job()
         self._parse()
@@ -45,22 +47,29 @@ class Interpreter:
             raise RuntimeError("Entry step Main not defined")
         self._runStep(self.steps['Main'])
 
+    def stop(self):
+        logger.debug("Requesting to stop...")
+        self._stop = True
+
     def _getStep(self, stepname):
         step = self.steps.get(stepname, None)
         if not step:
             raise RuntimeError(f"Undefined step {stepname}")
         return step
 
-    def _runStep(self, step: ASTNode):
+    def _runStep(self, step: ASTNode, *args):
+        self._setargs(self, *args)
         for expression in step.childs:
             self._exec(expression)
 
     def _exec(self, expr: ASTNode):
+        if self._stop:
+            return 
         if expr.type[0] != 'expression':
             logger.error('Not an expression')
         match expr.type[1]:
             case 'call':
-                self._runStep(self._getStep(expr.childs[0].type[1]))
+                self._runStep(self._getStep(expr.childs[0].type[1]), *self._eval(expr.childs[1]))
             case 'assign':
                 self.runtime.assign(expr.type[2], self._eval(expr.childs[0]))
             case 'speak':
@@ -72,6 +81,7 @@ class Interpreter:
             case 'wait':
                 self.runtime.wait(self._eval(expr.childs[0]))
             case 'hangup':
+                self.stop()
                 self.runtime.hangup()
             case 'switch':
                 self._exec_switch(expr)
@@ -88,7 +98,7 @@ class Interpreter:
         if match == -1 and default:
             return self._exec(default.childs[0])
         elif match != -1:
-            return self._exec(expr.childs[match])
+            return self._exec(expr.childs[match].childs[0])
 
     def _eval(self, term: ASTNode):
         match term.type[0]:
@@ -102,3 +112,8 @@ class Interpreter:
                 return [self._eval(x) for x in term.childs]
             case _:
                 raise RuntimeError("eval an unknown ASTNode")
+            
+    def _setargs(self, *args):
+        for i in range(len(args)):
+            self.runtime.assign(str(i), args[i])
+
