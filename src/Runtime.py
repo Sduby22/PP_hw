@@ -1,6 +1,6 @@
 from logging import getLogger
 import asyncio
-import aioconsole
+# import aioconsole
 import re
 
 from . import ConfigLoader
