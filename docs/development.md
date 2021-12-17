@@ -133,6 +133,7 @@ commit的描述应遵循[Angular提交规范](https://zj-git-guide.readthedocs.i
 - `RunPy`: 提供文法中callpy命令的实现，通过注册外部Python脚本保证了可拓展性
 
 模块关系图如下
+![](./modules.png)
 
 ### 功能
 
