@@ -1,4 +1,5 @@
 from logging import getLogger
+from termcolor import cprint
 import asyncio
 # import aioconsole
 import re
@@ -34,7 +35,7 @@ class Runtime:
         return self._conf.getRuntimeConfig()
 
     def speak(self, str):
-        print(f'>>> {str}')
+        cprint(f'Robot >>> {str}', 'yellow')
 
     def wait(self, timeStr):
         # async def ainput():
@@ -48,7 +49,7 @@ class Runtime:
         #     self._extractNumbers(str)
         # asyncio.run(ainput())
         self.speak(f'Waiting user input for {timeStr} seconds')
-        str = input('<<< ')
+        str = input('Input <<< ')
         self.assign('_input', str)
         self._extractKeywords(str)
         self._extractNumbers(str)

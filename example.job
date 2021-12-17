@@ -1,3 +1,5 @@
+# test comment
+
 step Main
 	callpy GetName $_number
 	$name = $_ret
@@ -36,13 +38,19 @@ step Topup
 	speak "请告诉我您想充值的金额"
 	wait '1210'
 
+	$amount = $_input_number
 	speak "您想充值" + $_input_number + "元，是吗？"
 	wait '10'
 	switch $_input_keyword
-		case "是" speak "谢谢您的支持，充值成功。"
+		case "是" call doTopup $amount
 		case "否" speak "充值已取消"
 		default speak "充值已取消"
 	endswitch
+endstep
+
+step doTopup
+	callpy Topup $amount
+	speak "充值" + $amount + "元成功，谢谢"
 endstep
 
 step Sorry
