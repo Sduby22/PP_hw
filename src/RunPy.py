@@ -70,7 +70,14 @@ class RunPy:
         elif len(args) > maxArgs:
             logger.error(f'Too many Aruguments to Call {funcName}, expected maximum of {maxArgs}, got{len(args)}')
             raise RuntimeError(f'Too many Aruguments to Call {funcName}, expected maximum of {maxArgs}, got{len(args)}')
-        return func(*args)
+        try:
+            ret = func(*args)
+            return ret
+        except Exception as e:
+            if self._configLoader.getScriptsConfig()['halt-onerror']:
+                raise e
+            else:
+                logger.warning(f'Ignoring Exception When calling py scripts {funcName}: {e}')
 
 runpy = RunPy()
 

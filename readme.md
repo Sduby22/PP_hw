@@ -104,6 +104,25 @@ scripts:
     - ./scripts/
 ```
 
+### 基本使用
+
+1. 安装依赖
+
+- 安装Python3.10
+- 安装pip依赖`pip3 install -r requirements.txt`
+
+2. 在配置文件中设置好自己的脚本文件路径
+```yaml
+job:
+  path: ./example.job
+```
+
+3. 执行Main.py
+
+```bash
+$ python3 Main.py
+```
+
 ## 开发文档
 
 见 [development.md](./docs/development.md)
