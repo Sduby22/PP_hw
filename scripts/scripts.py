@@ -28,3 +28,11 @@ def uploadcomplaint(complaint):
     cur = cur.execute('insert into complaints values (?)', (complaint,))
     conn.commit()
     conn.close()
+
+@runpy.register('Topup')
+def topup(number):
+    conn = sqlite3.connect('data/random_users.db')
+    cur = conn.cursor()
+    cur = cur.execute('update users set balance = balance + (?)', (int(number),))
+    conn.commit()
+    conn.close()
