@@ -5,8 +5,6 @@ pwd: .
 runtime:
   # path of user database, will be injected into scripts.
   user-db: ./data/random-users.py
-  # 'wait n' waits forever instead of wait a fixed time.
-  wait-forever: true
 
 job:
   path: ./Example.job
@@ -15,8 +13,6 @@ job:
 
 # python scripts dirs
 scripts: 
-  # kill runpy script after timeout (ms)
-  timeout: 3000
   # halts robot on runpy errors or timeouts.
   halt-onerror: false
   dirs: 

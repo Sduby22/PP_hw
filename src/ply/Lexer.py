@@ -1,29 +1,56 @@
 from ply.lex import lex
 from logging import getLogger
+from .. import ConfigLoader
 
 logger = getLogger('Interpreter')
-halt_on_error = False
+
 
 class Lexer:
-    def __init__(self):
-        global lexer
-        self._lexer = lexer
-        self._f = None
 
-    def setConfig(self, halt_onerror=False):
-        global halt_on_error
-        halt_on_error = halt_onerror
+    reserved = {
+        'switch':    'SWITCH',
+        'case':      'CASE',
+        'default':   'DEFAULT',
+        'endswitch': 'ENDSWITCH',
+        'step':      'STEP',
+        'endstep':   'ENDSTEP',
+        'call':      'CALL',
+        'callpy':    'CALLPY',
+        'wait':      'WAIT',
+        'beep':      'BEEP',
+        'speak':     'SPEAK',
+        'hangup':    'HANGUP',
+    }
+
+    tokens = [
+        'NEWLINE',
+        'VAR',
+        'ID',
+        'STR',
+    ] + list(reserved.values())
+
+    literals = ['+', '=']
+    t_ignore_COMMENT = r'\#.*'
+    t_ignore = ' \t'
+
+    def __init__(self, configLoader):
+        self._lexer = lex(module=self)
+        self._f = None
+        self._configLoader = configLoader
+
+    def getLexer(self):
+        return self._lexer
 
     def load(self, path):
         self._f = None
         with open(path, 'r', encoding='utf8') as f:
             self._f = f.read()
         if not self._f:
-            logger.error(f'[Lexer] Failed to load file {path}')
+            logger.error(f'Failed to load file {path}')
             return
         self._lexer.input(self._f)
         self._lexer.lineno = 1
-    
+
     def load_str(self, str):
         self._f = str
         self._lexer.input(str)
@@ -34,60 +61,39 @@ class Lexer:
             raise RuntimeError('reading token before load.')
         return self._lexer.token()
 
-KEYWORD = (
-        'if', 'endif', 'else', 'endif', 'switch', 'case', 'default',
-        'step', 'endstep', 'call', 'callpy', 
-        'wait', 'beep', 'speak', 'hangup'
-        )
+    def t_NEWLINE(self, t):
+        r'\n+'
+        t.lexer.lineno += len(t.value)
+        return t
 
-tokens = (
-        'KEYWORD',
-        'NEWLINE',
-        'VAR',
-        'STEP',
-        'STRING',
-        'OPERATOR',
-        'NUMBER',
-        )
+    def t_ID(self, t):
+        r'[a-zA-Z_][a-zA-Z_0-9]*'
+        t.type = self.reserved.get(t.value,'ID')    # Check for reserved words
+        return t
 
-t_ignore_COMMENT = r'\#.*'
-t_ignore = ' \t'
+    def t_VAR(self, t):
+        r'\$[a-zA-Z_0-9]*'
+        t.value = t.value[1:]
+        return t
 
-def t_OPERATOR(t):
-    r'\+|(=|>|<|!)?=|>|<'
-    return t
+    def t_STR(self, t):
+        r'''("((\\\")|[^\n\"])*")|('((\\\')|[^\n\'])*')'''
+        t.value = t.value[1:-1]
+        return t
 
-def t_NEWLINE(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-    return t
+    def t_error(self, t):
+        msg = f'line {t.lexer.lineno}: Unexpected symbol {t.value}'
+        if self._configLoader.getJobConfig().get('halt-onerror'):
+            raise RuntimeError(msg)
+        logger.error(msg)
+        t.lexer.skip(1)
 
 
-def t_KEYWORD(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    if t.value not in KEYWORD:
-        t.type = 'STEP'
-    return t
-
-def t_VAR(t):
-    r'\$[a-zA-Z_0-9]*'
-    t.value = t.value[1:]
-    return t
-
-def t_NUMBER(t):
-    r'\d+'
-    t.value = int(t.value)
-    return t
-
-def t_STRING(t):
-    r'''("((\\\")|[^\n\"])*")|('((\\\')|[^\n\'])*')'''
-    return t
-
-def t_error(t):
-    msg = f'[Lexer] line {t.lexer.lineno}: Unexpected symbol {t.value}'
-    if halt_on_error:
-        raise RuntimeError(msg)
-    logger.error(msg) 
-    t.lexer.skip(1)
-
-lexer = lex()
+if __name__ == '__main__':
+    c = ConfigLoader('src/data/default_config.yaml')
+    l = Lexer(c)
+    l.load_str('''step name endstep''')
+    token = l.token()
+    while token:
+        print(token)
+        token = l.token()

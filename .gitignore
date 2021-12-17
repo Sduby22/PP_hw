@@ -1,2 +1,5 @@
 __pycache__
 builds/
+
+src/ply/parser.out
+src/ply/parsetab.py

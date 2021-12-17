@@ -22,7 +22,7 @@ class ConfigLoader:
         if self._validate(config):
             self._config = config
         else:
-            self._config = None
+            self._config = {}
         self._updateDefault()
 
     def _validate(self, config):
@@ -30,7 +30,6 @@ class ConfigLoader:
             Optional('pwd', default='.'): str,
             'runtime': {
                 'user-db': str,
-                'wait-forever': bool,
             },
             'job': {
                 'path': str,
@@ -38,7 +37,6 @@ class ConfigLoader:
             },
             'scripts': {
                 'halt-onerror': bool,
-                'timeout': int,
                 'dirs': [str]
             }
         })
