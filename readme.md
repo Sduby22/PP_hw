@@ -73,6 +73,13 @@ va_args		: empty | term ' ' va_args
 额外规定：
 - 每个文件必须有一个Main step,作为脚本的入口step
 
+### 变量及运算
+
+- RobotSL支持简单的变量存储以及变量运算的功能
+- RobotSL的变量是由`$`符号加上字母，数字，及下划线的字符串组合组成。
+- RobotSL中所有的变量均视为字符串
+- 支持字符串加法运算符也就是字符串的拼接
+
 ### 示例脚本
 
 见[example.job](./example.job)
