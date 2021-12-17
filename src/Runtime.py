@@ -31,10 +31,12 @@ class Runtime:
         }
         pass
 
-    def getConfig(self):
-        return self._conf.getRuntimeConfig()
-
     def speak(self, str):
+        """
+        实现脚本中的speak命令
+
+        :param str str: speak的内容
+        """
         cprint(f'Robot >>> {str}', 'yellow')
 
     def wait(self, timeStr):
@@ -55,17 +57,36 @@ class Runtime:
         self._extractNumbers(str)
 
     def hangup(self):
+        """
+        挂断连接，终止脚本
+
+        """
         logger.info(f"user {self._variables.get('_number')} hung up")
 
     def assign(self, var, val):
+        """
+        为变量赋值
+
+        :param var str: 变量名
+        :param val Any: 要赋的值（会被转换为字符串）
+        """
         self._variables[var] = str(val)
         pass
 
     def beep(self):
+        """
+        实现发送滴声的方法（为电话客服设计）
+
+        """
         print('beep')
         pass
 
     def getvar(self, varname):
+        """
+        获取变量的值    
+
+       :param varname str: 变量名
+        """
         if varname not in self._variables:
             self._variables[varname] = ''
         return self._variables[varname]
@@ -80,3 +101,7 @@ class Runtime:
         match = re.findall(r'\d+', str)
         if match:
             self.assign('_input_number', match[0])
+            
+    def _getConfig(self):
+        return self._conf.getRuntimeConfig()
+

@@ -10,6 +10,7 @@ from logging import getLogger
 logger = getLogger('Interpreter')
 runpy = RunPy.getInstance()
 
+
 class Interpreter:
     def __init__(self, configLoader: ConfigLoader):
         self._lexer = Lexer(configLoader)
@@ -24,25 +25,23 @@ class Interpreter:
         self._load_job()
         self._parse()
 
-    def _load_job(self):
-        with open(self._config.getJobConfig().get('path'), 'r') as f:
-            self.job = f.read()
-        self._lexer.load_str(self.job)
-
-    def _parse(self):
-        logger.info("Begin parsing job file...")
-        if self.job == '':
-            raise RuntimeError('job is empty')
-        self.ast = self._parser.parseStr(self.job)
-        for stepdecl in self.ast.childs:
-            self.steps[stepdecl.type[1]] = stepdecl
-
     def accept(self, runtime: Runtime):
+        """
+        接受一个Runtime对象，并开始从Main step运行脚本
+
+        :param runtime Runtime: 
+        """
         self._stop = False
         self.runtime = runtime
         self.run()
 
     def run(self):
+        """
+        开始运行脚本
+
+        :raises RuntimeError: 没有接受Runtime对象
+        :raises RuntimeError: 没有定义Main step
+        """
         if not self.runtime or not self.ast:
             raise RuntimeError("Must call setRuntime and load_job before Run")
         logger.info("Begin running...")
@@ -51,6 +50,10 @@ class Interpreter:
         self._runStep(self.steps['Main'])
 
     def stop(self):
+        """
+        停止运行脚本
+
+        """
         logger.debug("Requesting to stop...")
         self._stop = True
 
@@ -67,18 +70,20 @@ class Interpreter:
 
     def _exec(self, expr: ASTNode):
         if self._stop:
-            return 
+            return
         if expr.type[0] != 'expression':
             logger.error('Not an expression')
         match expr.type[1]:
             case 'call':
-                self._runStep(self._getStep(expr.childs[0].type[1]), *self._eval(expr.childs[1]))
+                self._runStep(self._getStep(
+                    expr.childs[0].type[1]), *self._eval(expr.childs[1]))
             case 'assign':
                 self.runtime.assign(expr.type[2], self._eval(expr.childs[0]))
             case 'speak':
                 self.runtime.speak(self._eval(expr.childs[0]))
             case 'callpy':
-                self._callpy(expr.childs[0].type[1], *self._eval(expr.childs[1]))
+                self._callpy(expr.childs[0].type[1],
+                             *self._eval(expr.childs[1]))
             case 'beep':
                 self.runtime.beep()
             case 'wait':
@@ -95,7 +100,8 @@ class Interpreter:
 
     def _exec_switch(self, expr: ASTNode):
         condition = self.runtime.getvar(expr.type[2])
-        cases = [child.type[1] for child in expr.childs if child.type[0] == 'case']
+        cases = [child.type[1]
+                 for child in expr.childs if child.type[0] == 'case']
         default = expr.childs[-1] if expr.childs[-1].type[0] == 'default' else None
         match = -1
         for i in range(len(cases)):
@@ -119,8 +125,20 @@ class Interpreter:
                 return [self._eval(x) for x in term.childs]
             case _:
                 raise RuntimeError("eval an unknown ASTNode")
-            
+
     def _setargs(self, *args):
         for i in range(len(args)):
             self.runtime.assign(str(i), args[i])
 
+    def _load_job(self):
+        with open(self._config.getJobConfig().get('path'), 'r') as f:
+            self.job = f.read()
+        self._lexer.load_str(self.job)
+
+    def _parse(self):
+        logger.info("Begin parsing job file...")
+        if self.job == '':
+            raise RuntimeError('job is empty')
+        self.ast = self._parser.parseStr(self.job)
+        for stepdecl in self.ast.childs:
+            self.steps[stepdecl.type[1]] = stepdecl

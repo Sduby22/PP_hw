@@ -17,6 +17,11 @@ class Parser:
         self._configLoader = configLoader
 
     def parseStr(self, str):
+        """
+        解析一个字符串，生成语法树
+
+        :param str str: 要解析的字符串
+        """
         return self._yacc.parse(str, self._lexer.getLexer())
 
     def p_job(self, p):
