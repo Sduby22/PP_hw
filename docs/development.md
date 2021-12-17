@@ -148,6 +148,28 @@ commit的描述应遵循[Angular提交规范](https://zj-git-guide.readthedocs.i
 
 见模块划分一节。
 
+自行编写外部Python脚本的流程如下
+```python
+# 首先引入RunPy模块
+from src import RunPy
+
+import sqlite3
+
+# 调用getInstance类方法获取全局的runpy实例
+runpy = RunPy.getInstance()
+
+# 编写完脚本函数以后，只需要加上runpy.register装饰器并传入你想赋予的
+# 脚本名称就可以了，之后便可以使用callpy命令调用
+@runpy.register('GetName')
+def getname(number):
+    conn = sqlite3.connect('data/random_users.db')
+    cur = conn.cursor()
+    cur = cur.execute('select name from users where number = (?)', (number,))
+    res = cur.fetchone()[0]
+    conn.close()
+    return res
+```
+
 ### 人机接口
 
 人机接口通过`Runtime`模块实现，具体包括实现程序如何向用户输出/用户如何向程序输入等接口。

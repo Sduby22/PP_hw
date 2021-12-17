@@ -39,9 +39,18 @@ class Lexer:
         self._configLoader = configLoader
 
     def getLexer(self):
+        """
+        获取类内的ply.lexer对象
+
+        """
         return self._lexer
 
     def load(self, path):
+        """
+        载入脚本文件
+
+        :param path str: 脚本文件路径
+        """
         self._f = None
         with open(path, 'r', encoding='utf8') as f:
             self._f = f.read()
@@ -52,11 +61,21 @@ class Lexer:
         self._lexer.lineno = 1
 
     def load_str(self, str):
+        """
+        载入一段字符串
+
+        :param str str:
+        """
         self._f = str
         self._lexer.input(str)
         self._lexer.lineno = 1
 
     def token(self):
+        """
+        获取下一个词法符号
+
+        :raises RuntimeError: 未载入脚本文件
+        """
         if not self._f:
             raise RuntimeError('reading token before load.')
         return self._lexer.token()
@@ -68,7 +87,7 @@ class Lexer:
 
     def t_ID(self, t):
         r'[a-zA-Z_][a-zA-Z_0-9]*'
-        t.type = self.reserved.get(t.value,'ID')    # Check for reserved words
+        t.type = self.reserved.get(t.value, 'ID')    # Check for reserved words
         return t
 
     def t_VAR(self, t):
