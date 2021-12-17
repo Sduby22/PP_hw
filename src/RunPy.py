@@ -33,7 +33,7 @@ class RunPy:
         if self._configLoader:
             return 
         self._configLoader = configLoader
-        dirs = self.getConfig().get('dirs')
+        dirs = self._getConfig().get('dirs')
         for dir in dirs:
             self._getFiles(dir)
         for file in self._fileList:
