@@ -1,7 +1,6 @@
 from logging import getLogger
 from termcolor import cprint
-import asyncio
-# import aioconsole
+from inputimeout import inputimeout, TimeoutOccurred
 import re
 
 from . import ConfigLoader
@@ -40,18 +39,12 @@ class Runtime:
         cprint(f'Robot >>> {str}', 'yellow')
 
     def wait(self, timeStr):
-        # async def ainput():
-        #     str = ''
-        #     try:
-        #         str = await asyncio.wait_for(aioconsole.ainput("<<<"), int(timeStr))
-        #     except asyncio.TimeoutError as e:
-        #         str = ''
-        #     self.assign('_input', str)
-        #     self._extractKeywords(str)
-        #     self._extractNumbers(str)
-        # asyncio.run(ainput())
         self.speak(f'Waiting user input for {timeStr} seconds')
-        str = input('Input <<< ')
+        try:
+            str = inputimeout(prompt='Input <<< ', timeout=int(timeStr))
+        except TimeoutOccurred:
+            str = 'timeout'
+            logger.info("User input timed out.")
         self.assign('_input', str)
         self._extractKeywords(str)
         self._extractNumbers(str)
