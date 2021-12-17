@@ -195,6 +195,30 @@ RobotSL编写的测试覆盖了以下范围：
 - `Runtime`: 是否能够正确处理Interpreter的设置变量，提取变量关键字等接口调用
 - `Runpy`: 是否能够正确注册/调用脚本函数，并检测是否提供了正确数量的参数
 
+### Gitlab CI配置
+
+每次push的时候都会触发Gitlab CI Runner的运行，流水线流程如下
+
+```yaml
+before_script:
+  - pip3 install -r requirements.txt
+
+gen_random_users:
+  stage: build
+  script:
+    - cd data
+    - sqlite3 random_users.db < DDL.sql
+    - python3 GenRandomUsers.py
+
+tests:
+  stage: test
+  script:
+    - python3 tests.py
+```
+
+- 安装依赖
+- 生成随机用户数据库
+- 运行测试脚本
 
 ## 记法
 
