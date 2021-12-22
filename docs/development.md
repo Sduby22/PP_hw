@@ -187,6 +187,52 @@ RobotSL提供一个[基本的Runtime实现](../src/Runtime.py), 此Runtime实现
 输出，如果想拓展可以通过重写Runtime的方法来拓展。比如将控制台输出重载为电话语音，或是
 重载为网络的向客户端发送信息等。
 
+Runtime 人机接口提供的接口如下：
+
+
+    def speak(self, str):
+        """
+        实现脚本中的speak命令
+
+        :param str str: speak的内容
+        """
+
+    def wait(self, timeStr):
+        """
+        等待用户输入, 如果时间超过timeStr，则超时
+
+        :param timeStr str: 要等待的时间字符串
+        """
+
+    def hangup(self):
+        """
+        挂断连接，终止脚本
+
+        """
+
+    def assign(self, var, val):
+        """
+        为变量赋值
+
+        :param var str: 变量名
+        :param val Any: 要赋的值（会被转换为字符串）
+        """
+
+    def beep(self):
+        """
+        实现发送滴声的方法（为电话客服设计）
+
+        """
+
+    def getvar(self, varname):
+        """
+        获取变量的值    
+
+       :param varname str: 变量名
+        """
+
+重写以上的接口即可实现人机接口的拓展。包括且不限于图形界面，http后端服务器，电话线路等。
+
 ## 测试
 
 ### 测试桩

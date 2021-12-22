@@ -39,6 +39,11 @@ class Runtime:
         cprint(f'Robot >>> {str}', 'yellow')
 
     def wait(self, timeStr):
+        """
+        等待用户输入, 如果时间超过timeStr，则超时
+
+        :param timeStr str: 要等待的时间字符串
+        """
         self.speak(f'Waiting user input for {timeStr} seconds')
         try:
             str = inputimeout(prompt='Input <<< ', timeout=int(timeStr))
