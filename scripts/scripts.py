@@ -1,5 +1,6 @@
 # 首先引入RunPy模块
 from src import RunPy
+import requests
 
 import sqlite3
 
@@ -41,3 +42,11 @@ def topup(number):
     cur = cur.execute('update users set balance = balance + (?)', (int(number),))
     conn.commit()
     conn.close()
+
+@runpy.register('weather')
+def weather(loc):
+    resp = requests.get('http://wttr.in/{}?format=3'.format(loc))
+    if resp.status_code == 404:
+        return ""
+    else:
+        return resp.text

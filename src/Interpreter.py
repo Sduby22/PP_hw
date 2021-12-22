@@ -43,6 +43,8 @@ class Interpreter:
         :raises RuntimeError: 没有定义Main step
         """
         if not self.runtime or not self.ast:
+            if self.ast:
+                self.ast.print()
             raise RuntimeError("Must call setRuntime and load_job before Run")
         logger.info("Begin running...")
         if 'Main' not in self.steps:

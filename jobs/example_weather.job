@@ -1,0 +1,18 @@
+# test comment
+
+step Main
+	speak "我是一个天气机器人，你想查询哪里的天气"
+	wait "10000"
+	call Weather $_input
+	speak "谢谢您的使用"
+	hangup
+endstep
+
+step Weather
+	callpy weather $1
+	switch $_ret
+		case "" speak "抱歉，没能查询到。"
+		default speak $_ret
+	endswitch
+endstep
+

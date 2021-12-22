@@ -121,7 +121,16 @@ commit的描述应遵循[Angular提交规范](https://zj-git-guide.readthedocs.i
 
 #### 调用栈&变量
 
-程序的调用栈由底层的Python Interpreter维护，变量由Runtime使用一个哈希表维护
+程序的调用栈由底层的Python Interpreter维护，变量由Runtime使用一个哈希表维护, 例如
+
+```python
+        self._variables = {
+            '_input': '',
+            '_input_keyword': '',
+            '_number': number,
+            '_ret': '',
+        }
+```
 
 ### 模块划分
 

@@ -1,0 +1,14 @@
+# test comment
+
+step Main
+	call Echo '你好，我是一个复读机，请对我说些什么，说"再见"也可以!'
+endstep
+
+step Echo 
+	speak $1
+	wait '100000'
+	switch $_input
+		case "再见" hangup
+		default call Echo $_input
+	endswitch
+endstep
