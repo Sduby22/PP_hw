@@ -10,6 +10,19 @@ goodconf.load('./src/data/default_config.yaml')
 
 
 class ConfigLoaderTest(unittest.TestCase):
+    '''
+    测试ConfigLoader是否能够正确加载配置并校验配置是否合法
+    '''
+    def test_parse_job2(self):
+        conf = ConfigLoader()
+        conf.load('./config.yaml')
+        lexer = Lexer(conf)
+        lexer.load('./jobs/example.job')
+        parser = Parser(conf, lexer)
+        with open('./jobs/example.job', 'r') as f:
+            p = parser.parseStr(f.read())
+            p.print()
+
     def test_missing_key(self):
         conf = ConfigLoader()
         self.assertRaises(SchemaError, conf.load, 'tests/missing_key.yaml')
@@ -32,6 +45,9 @@ class ConfigLoaderTest(unittest.TestCase):
 
 
 class LexerTest(unittest.TestCase):
+    '''
+    测试词法分析模块能否正确获取token并识别出错误token
+    '''
     def get_token(self, str):
         conf = ConfigLoader()
         conf.load('tests/good_value.yaml')
@@ -73,6 +89,9 @@ class LexerTest(unittest.TestCase):
             t = lexer.token()
 
 class ParserTest(unittest.TestCase):
+    '''
+    测试语法分析程序能否正确解析脚本文件
+    '''
     def test_parse_job(self):
         conf = ConfigLoader()
         conf.load('./config.yaml')
@@ -105,6 +124,9 @@ class ParserTest(unittest.TestCase):
             p.print()
 
 class RuntimeTest(unittest.TestCase):
+    '''
+    测试Runtime的设置变量，提取关键词功能是否正常
+    '''
     def test_runtime_setvar(self):
         rt = Runtime("123456", goodconf)
         rt.assign('asd', 123)
@@ -121,6 +143,9 @@ class RuntimeTest(unittest.TestCase):
 
 
 class RunpyTest(unittest.TestCase):
+    '''
+    测试RunPy能否正常注册外部脚本并检测参数合法性
+    '''
     runpy = RunPy.getInstance()
     runpy.init(goodconf)
 
@@ -140,6 +165,9 @@ class RunpyTest(unittest.TestCase):
                           'test1', self, 2, 3, 4, 5)
 
 class MainTest(unittest.TestCase):
+    '''
+    测试脚本运行全过程
+    '''
 
     def test_main_test(self):
         stdout = sys.stdout
