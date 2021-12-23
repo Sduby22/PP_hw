@@ -19,9 +19,10 @@ class Runtime:
         '充值',
     ]
 
-    def __init__(self, number, config: ConfigLoader):
+    def __init__(self, number, config: ConfigLoader, enable_timeout = True):
         logger.info("Initializing runtime")
         self._conf = config
+        self._enable_timeout = enable_timeout
         self._variables = {
             '_input': '',
             '_input_keyword': '',
@@ -45,11 +46,14 @@ class Runtime:
         :param timeStr str: 要等待的时间字符串
         """
         self.speak(f'Waiting user input for {timeStr} seconds')
-        try:
-            str = inputimeout(prompt='Input <<< ', timeout=int(timeStr))
-        except TimeoutOccurred:
-            str = 'timeout'
-            logger.info("User input timed out.")
+        if self._enable_timeout:
+            try:
+                str = inputimeout(prompt='Input <<< ', timeout=int(timeStr))
+            except TimeoutOccurred:
+                str = 'timeout'
+                logger.info("User input timed out.")
+        else:
+            str = input()
         self.assign('_input', str)
         self._extractKeywords(str)
         self._extractNumbers(str)

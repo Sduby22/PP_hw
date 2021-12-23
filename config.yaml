@@ -7,7 +7,7 @@ runtime:
   user-db: ./data/random-users.py
 
 job:
-  path: ./jobs/example_weather.job
+  path: ./jobs/example.job
   # halts program on job scripts syntax errors.
   halt-onerror: false
 

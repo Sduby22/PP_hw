@@ -1,6 +1,7 @@
 import unittest
 import yaml
-from src import ConfigLoader, Runtime, RunPy
+import sys
+from src import ConfigLoader, Runtime, RunPy, Interpreter
 from src.ply import Lexer, Parser
 from schema import SchemaError
 
@@ -71,18 +72,16 @@ class LexerTest(unittest.TestCase):
         while t:
             t = lexer.token()
 
-
 class ParserTest(unittest.TestCase):
     def test_parse_job(self):
         conf = ConfigLoader()
         conf.load('./config.yaml')
         lexer = Lexer(conf)
-        lexer.load('./example.job')
+        lexer.load('./jobs/example.job')
         parser = Parser(conf, lexer)
-        with open('./example.job', 'r') as f:
+        with open('./jobs/example.job', 'r') as f:
             p = parser.parseStr(f.read())
             p.print()
-
 
 class RuntimeTest(unittest.TestCase):
     def test_runtime_setvar(self):
@@ -119,6 +118,28 @@ class RunpyTest(unittest.TestCase):
         self.assertRaises(RuntimeError, self.runpy.callFunc,
                           'test1', self, 2, 3, 4, 5)
 
+class MainTest(unittest.TestCase):
+
+    def _redirect(self, strin, strout):
+        pass
+
+    def test_main_test(self):
+        stdout = sys.stdout
+        stdin = sys.stdin
+
+        sys.stdout = open("./tests/out.txt", 'w+')
+        sys.stdin = open('./tests/in.txt', 'r')
+        interpreter = Interpreter(goodconf)
+        runtime = Runtime('test', goodconf, enable_timeout=False)
+        interpreter.accept(runtime)
+
+        sys.stdout = stdout
+        with open('./tests/out.txt') as f:
+            out = f.read()
+        with open('./tests/example_output.txt') as f:
+            example_out = f.read()
+
+        self.assertEqual(out, example_out)
 
 if __name__ == "__main__":
     unittest.main()

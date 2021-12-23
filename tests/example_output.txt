@@ -1,0 +1,8 @@
+[33mRobot >>> 你好None, 请问有什么可以帮您？[0m
+[33mRobot >>> Waiting user input for 100 seconds[0m
+[33mRobot >>> 请告诉我您想充值的金额[0m
+[33mRobot >>> Waiting user input for 1210 seconds[0m
+[33mRobot >>> 您想充值100元，是吗？[0m
+[33mRobot >>> Waiting user input for 10 seconds[0m
+[33mRobot >>> 充值100元成功，谢谢[0m
+[33mRobot >>> 谢谢您的使用，再见。[0m

@@ -27,7 +27,8 @@ r"""
 |_| \_\___/|_.__/ \___/ \__|____/|_____|
                                         
 """)
-    input("按回车从数据库中抽取一位随机用户模拟通话:")
+    str = input("按回车从数据库中抽取一位随机用户模拟通话:")
+    return str != '退出'
 
 if __name__ == '__main__':
     conf = ConfigLoader('./config.yaml')
@@ -35,7 +36,8 @@ if __name__ == '__main__':
     interpreter = Interpreter(conf)
 
     while True:
-        welcome()
+        if not welcome():
+            break
         number = select_rand_number()
         runtime = Runtime(number, conf)
         interpreter.accept(runtime)
