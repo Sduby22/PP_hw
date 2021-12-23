@@ -161,5 +161,8 @@ class Parser:
         pass
 
     def p_error(self, p):
+        if self._configLoader.getJobConfig()['halt-onerror']:
+            raise RuntimeError("SyntaxError at line {}, Unexpected {}".format(
+                self._lexer.getLexer().lineno, p))
         logger.error('SyntaxError at line {}, Unexpected {}'.format(
             self._lexer.getLexer().lineno, p))
