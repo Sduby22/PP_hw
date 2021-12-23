@@ -83,6 +83,27 @@ class ParserTest(unittest.TestCase):
             p = parser.parseStr(f.read())
             p.print()
 
+    def test_parse_job2(self):
+        conf = ConfigLoader()
+        conf.load('./config.yaml')
+        lexer = Lexer(conf)
+        lexer.load('./jobs/example_echo.job')
+        parser = Parser(conf, lexer)
+        with open('./jobs/example_echo.job', 'r') as f:
+            p = parser.parseStr(f.read())
+            p.print()
+
+
+    def test_parse_job3(self):
+        conf = ConfigLoader()
+        conf.load('./config.yaml')
+        lexer = Lexer(conf)
+        lexer.load('./jobs/example_weather.job')
+        parser = Parser(conf, lexer)
+        with open('./jobs/example_weather.job', 'r') as f:
+            p = parser.parseStr(f.read())
+            p.print()
+
 class RuntimeTest(unittest.TestCase):
     def test_runtime_setvar(self):
         rt = Runtime("123456", goodconf)
@@ -120,9 +141,6 @@ class RunpyTest(unittest.TestCase):
 
 class MainTest(unittest.TestCase):
 
-    def _redirect(self, strin, strout):
-        pass
-
     def test_main_test(self):
         stdout = sys.stdout
         stdin = sys.stdin
@@ -137,6 +155,24 @@ class MainTest(unittest.TestCase):
         with open('./tests/out.txt') as f:
             out = f.read()
         with open('./tests/example_output.txt') as f:
+            example_out = f.read()
+
+        self.assertEqual(out, example_out)
+
+    def test_main_test2(self):
+        stdout = sys.stdout
+        stdin = sys.stdin
+
+        sys.stdout = open("./tests/out.txt", 'w+')
+        sys.stdin = open('./tests/in2.txt', 'r')
+        interpreter = Interpreter(goodconf)
+        runtime = Runtime('test', goodconf, enable_timeout=False)
+        interpreter.accept(runtime)
+
+        sys.stdout = stdout
+        with open('./tests/out.txt') as f:
+            out = f.read()
+        with open('./tests/example_output2.txt') as f:
             example_out = f.read()
 
         self.assertEqual(out, example_out)

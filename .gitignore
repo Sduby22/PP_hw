@@ -3,3 +3,4 @@ builds/
 
 src/ply/parser.out
 src/ply/parsetab.py
+tests/out.txt

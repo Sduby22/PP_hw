@@ -1,0 +1,6 @@
+[33mRobot >>> 你好None, 请问有什么可以帮您？[0m
+[33mRobot >>> Waiting user input for 100 seconds[0m
+[33mRobot >>> 您好，请在滴声后留下您的宝贵建议[0m
+beep
+[33mRobot >>> Waiting user input for 114514 seconds[0m
+[33mRobot >>> 谢谢您的使用，再见。[0m
