@@ -196,8 +196,11 @@ class MainTest(unittest.TestCase):
         interpreter = Interpreter(goodconf)
         runtime = Runtime('test', goodconf, enable_timeout=False)
         interpreter.accept(runtime)
-
+    
+        sys.stdout.close()
+        sys.stdin.close()
         sys.stdout = stdout
+        sys.stdin = stdin
         with open('./tests/out.txt') as f:
             out = f.read()
         with open('./tests/example_output2.txt') as f:
